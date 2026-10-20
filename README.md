@@ -1,5 +1,8 @@
 # The YouTube agent skill
 
+> Fork of [Jakeschincariol/youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill) (MIT), with fixes so it
+> runs as a Claude Code plugin, in Cowork and on claude.ai. See [What changed in this fork](#what-changed-in-this-fork).
+
 Eleven Claude skills that run a YouTube channel. Free, MIT, no signup, no API key, nothing to
 connect.
 
@@ -18,7 +21,7 @@ channel, not by how big the channel is.
 Paste this into Claude:
 
 ```
-https://github.com/Jakeschincariol/youtube-agent-skill
+https://github.com/ChidghanaH/youtube-agent-skill
 
 Install this skill, then confirm /yt-script works.
 ```
@@ -26,16 +29,21 @@ Install this skill, then confirm /yt-script works.
 Or do it yourself, in Claude Code:
 
 ```bash
-git clone https://github.com/Jakeschincariol/youtube-agent-skill.git
+git clone https://github.com/ChidghanaH/youtube-agent-skill.git
 cp -r youtube-agent-skill/skills/yt-* ~/.claude/skills/
 ```
 
 Or as a plugin:
 
 ```
-/plugin marketplace add Jakeschincariol/youtube-agent-skill
+/plugin marketplace add ChidghanaH/youtube-agent-skill
 /plugin install youtube-agent
 ```
+
+In Cowork or claude.ai: add the repo as a plugin marketplace from the plugin settings, or zip each
+`skills/yt-*` folder and upload it under Settings -> Capabilities -> Skills. Upload all eleven: several
+of them call scripts in their siblings (`yt-chapters` and `yt-retention` use `yt-edit/deadair.py`,
+`yt-viral` and `yt-shorts` use `yt-script/`, `yt-audit` uses `yt-package/` and `yt-script/`).
 
 Project-local instead of global: copy the same folders into your repo's `.claude/skills/`. No Claude
 Code at all? Paste any single `SKILL.md` at the top of a chat and it runs as a mode. You lose the six
@@ -43,7 +51,7 @@ Python tools, which is most of the point of `/yt-script`, `/yt-retention` and `/
 rest works.
 
 Then spend ten minutes on [`templates/voice.md`](templates/voice.md). Copy it to
-`~/.claude/youtube/voice.md` and fill it in, or send Claude three of your own videos and say "write
+`~/.claude/youtube/voice.md` (Claude Code) or `voice.md` in your working folder (Cowork / claude.ai) and fill it in, or send Claude three of your own videos and say "write
 my voice.md from these". Every skill reads that file. It matters more here than anywhere else,
 because you have to say the words out loud.
 
@@ -103,6 +111,19 @@ touches your credentials.
 
 **Nothing invents a number.** If a skill wants a figure it does not have, it asks you for it or
 writes the line without it.
+
+## What changed in this fork
+
+- **Script paths.** The skills told Claude to run `python3 hookscore.py` etc. from wherever it happened
+  to be, which fails once the skills are installed to `~/.claude/skills/` or a plugin. Every skill that
+  runs a script now says the path is relative to its own folder.
+- **`voice.md` location.** Also looked for in the working folder, since Cowork and claude.ai have no `~/.claude`.
+- **`retention.py`** no longer mistakes the `--duration` value for the input file when the flag comes
+  first, and handles exports that use 0-1 ratios instead of percentages.
+- **`swipe.py`** reads raw `yt-dlp --flat-playlist -J` output directly, and degrades gracefully if `yt-script` is missing.
+- **`chapters.py` / `retention.py`** give a clear message instead of a traceback when `yt-edit` is not installed beside them.
+- All text files are read as UTF-8 (Windows default code pages broke on `hooks.json`).
+- Plugin manifests point at this repo.
 
 ## Licence
 
