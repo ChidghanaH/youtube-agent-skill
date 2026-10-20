@@ -9,6 +9,10 @@ description: >-
 
 # yt-edit
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 An edit decision list from a timestamped transcript. It prints the cuts. You apply them.
 
 ```bash
