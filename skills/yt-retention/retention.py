@@ -36,10 +36,14 @@ def main():
     a = sys.argv[1:]
     as_json = "--json" in a; a = [x for x in a if x != "--json"]
     tr = a[a.index("--transcript") + 1] if "--transcript" in a else None
-    files = [x for x in a if not x.startswith("--") and x != tr]
+    flag_vals = {a[i + 1] for i, x in enumerate(a) if x in ("--transcript", "--duration") and i + 1 < len(a)}
+    files = [x for x in a if not x.startswith("--") and x not in flag_vals]
     if not files or not os.path.exists(files[0]): print(__doc__); sys.exit(1)
     rows = load_csv(files[0])
     if len(rows) < 8: print("could not read at least 8 data points from that csv"); sys.exit(1)
+    # Some Studio exports write 0-1 ratios rather than 0-100 percentages. Normalise both axes.
+    if max(r[1] for r in rows) <= 1.5: rows = [(x, y * 100) for x, y in rows]
+    if max(r[0] for r in rows) <= 1.0: rows = [(x * 100, y) for x, y in rows]
     xs = [r[0] for r in rows]; ys = [r[1] for r in rows]
     pct_axis = max(xs) <= 100.5
     dur = None
@@ -64,7 +68,10 @@ def main():
     said = {}
     if tr and os.path.exists(tr):
         sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "yt-edit"))
-        from deadair import load as load_cues
+        try:
+            from deadair import load as load_cues
+        except ImportError:
+            print("--transcript needs the yt-edit skill installed next to yt-retention (it shares deadair.py)"); sys.exit(1)
         cues = load_cues(tr)
         for c in cliffs:
             if c["at_seconds"] is None: continue

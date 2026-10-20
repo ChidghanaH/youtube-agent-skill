@@ -9,6 +9,10 @@ description: >-
 
 # yt-retention
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 The retention graph is the only honest feedback YouTube gives you. Almost nobody exports it.
 
 ```bash
