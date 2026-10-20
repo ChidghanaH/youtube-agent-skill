@@ -8,6 +8,10 @@ description: >-
 
 # yt-shorts
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 A Short cut out of a long video is not a clip of the best moment. It is a moment that **survives
 without the video around it**, which is a much smaller set.
 
