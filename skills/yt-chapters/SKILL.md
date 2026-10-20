@@ -8,6 +8,10 @@ description: >-
 
 # yt-chapters
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 ```bash
 python3 chapters.py transcript.srt --target 8
 ```

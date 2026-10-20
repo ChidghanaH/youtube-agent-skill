@@ -15,7 +15,10 @@ summariser.
 """
 import json, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "yt-edit"))
-from deadair import load, parse_ts  # noqa: E402  (same parser, one implementation)
+try:
+    from deadair import load  # noqa: E402  (same parser, one implementation)
+except ImportError:
+    sys.exit("chapters.py needs the yt-edit skill installed next to yt-chapters (it shares deadair.py)")
 
 STOP = set("the a an of for to in on and or is are was were be been with this that it as at by from "
            "you your i my we our they them he she but so if then than there here what which who how "
