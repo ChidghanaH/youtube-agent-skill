@@ -19,7 +19,11 @@ about the words on screen, not a claim about why the video worked.
 import json, os, re, statistics, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FORMULAS = json.load(open(os.path.join(HERE, "..", "yt-script", "hooks.json")))["hooks"]
+_HOOKS = next((p for p in (os.path.join(HERE, "hooks.json"), os.path.join(HERE, "..", "yt-script", "hooks.json"))
+               if os.path.exists(p)), None)
+FORMULAS = json.load(open(_HOOKS, encoding="utf-8"))["hooks"] if _HOOKS else []
+if not _HOOKS:
+    print("  note: hooks.json not found (install yt-script next to yt-viral) - formulas will read Unclassified", file=sys.stderr)
 
 def classify(title):
     scored = []
@@ -35,8 +39,14 @@ def main():
     lo = float(a[a.index("--min") + 1]) if "--min" in a else 1.5
     files = [x for x in a if not x.startswith("--") and not re.match(r"^[\d.]+$", x)]
     if not files or not os.path.exists(files[0]): print(__doc__); sys.exit(1)
-    rows = json.load(open(files[0]))
-    if isinstance(rows, dict): rows = rows.get("videos", [])
+    rows = json.load(open(files[0], encoding="utf-8"))
+    if isinstance(rows, dict):
+        # accept raw `yt-dlp --flat-playlist -J` output as well as the documented list
+        ch = rows.get("channel") or rows.get("uploader") or rows.get("title")
+        rows = rows.get("videos") or [{"channel": e.get("channel") or e.get("uploader") or ch,
+                                       "title": e.get("title", ""), "views": e.get("view_count") or e.get("views") or 0,
+                                       "url": e.get("url", ""), "duration": e.get("duration")}
+                                      for e in rows.get("entries", []) if e]
     by = {}
     for r in rows: by.setdefault(r.get("channel", "?"), []).append(r)
     out, thin = [], []

@@ -9,6 +9,10 @@ description: >-
 
 # yt-viral
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 Raw view counts rank channel size, not ideas. This ranks by **multiple over each channel's own
 median**, which is the only version of the question that is about the video.
 
