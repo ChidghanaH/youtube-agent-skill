@@ -17,7 +17,7 @@ all. Treat a low score as a reason to look again, never a high score as a promis
 import json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FORMULAS = json.load(open(os.path.join(HERE, "hooks.json")))["hooks"]
+FORMULAS = json.load(open(os.path.join(HERE, "hooks.json"), encoding="utf-8"))["hooks"]
 
 FILLER = {"basically","actually","literally","just","really","very","so","kind","sort","like",
           "guys","hey","welcome","today","video","subscribe","channel"}
@@ -109,7 +109,7 @@ def main():
     if "--hook" in a:
         lines = [a[a.index("--hook") + 1]]
     elif a and os.path.exists(a[0]):
-        lines = [l for l in open(a[0]).read().splitlines() if l.strip()]
+        lines = [l for l in open(a[0], encoding="utf-8").read().splitlines() if l.strip()]
     else:
         print(__doc__); sys.exit(1 if not a else 0)
     out = []

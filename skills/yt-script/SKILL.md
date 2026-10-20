@@ -10,9 +10,13 @@ description: >-
 
 # yt-script
 
+> **Paths.** Every script path below is relative to the folder this `SKILL.md` lives in - run it
+> as `python3 <this skill's folder>/<script>`, not from the user's working directory. Sibling skills
+> (`../yt-*`) must be installed alongside this one.
+
 One idea into a script somebody finishes.
 
-Two tools live in this folder and both actually run. Use them. Do not eyeball the hook.
+One tool lives in this folder, with its formula file, and it actually runs. Use it. Do not eyeball the hook.
 
 ```bash
 python3 hookscore.py hooks.txt              # rank your hook options
@@ -21,10 +25,11 @@ python3 hookscore.py --hook "one line"      # score a single one
 
 ## Before you write
 
-1. Read `~/.claude/youtube/voice.md` if it exists. That is the user's voice profile: how they talk
+1. Read the user's `voice.md` if it exists - look in `~/.claude/youtube/voice.md` first, then
+   `voice.md` or `youtube/voice.md` in the current working folder (Cowork and claude.ai have no `~/.claude`). That is the user's voice profile: how they talk
    on camera, the words they never use, who they are talking to, what they will not claim. If it
    does not exist, ask for **three of their own videos**, read or transcribe them, infer the voice,
-   and write the file. A script in the wrong voice is worse than no script, because they have to
+   and write the file to whichever of those locations is writable. A script in the wrong voice is worse than no script, because they have to
    read it out loud.
 2. Never invent a number, a result or a source. If a figure would strengthen it and you do not have
    one, ask for it or write the line without it.
